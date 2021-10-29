@@ -5,6 +5,10 @@
 #include <ctype.h>
 #include <errno.h>
 
+
+#include "../include/display.h"
+#include "../../common/include/common.h"
+
 static struct termios orig_termios;
 
 void error_handling(const char * error_msg);    // function should be called on any error handlings related to ui
@@ -13,12 +17,6 @@ int entering_raw_mode(void);    // enter raw mode of terminal
 void clear_screen(void);        // clear screen and move cursor and the left top bottom
 char read_character(void);      // read input from user
 void reading_operation(void);   // parse income data from user
-
-void error_handling(const char * error_msg)
-{
-    perror(error_msg);
-    exit(1);
-}
 
 void disable_raw_mode()
 {
