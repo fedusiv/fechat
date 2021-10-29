@@ -1,7 +1,18 @@
 #include <unistd.h>
 #include <errno.h>
-#include "../../common/include/common.h"
+#include <stdlib.h>
 
+#include "../../common/include/common.h"
+#include "../include/input_capture.h"
+#include "../../common/include/messaging_queue.h"
+
+
+void create_internal_read_message(INPUT_CAPTURE_MESSAGE_OPCODE opcode)
+{
+    input_capture_message_t * msg = malloc(sizeof(input_capture_message_t));
+    msg->opcode = opcode;
+    create_internal_message(READ_CAPTURE_IN_OP, (void *) msg);
+}
 
 char read_character()
 {
@@ -22,7 +33,7 @@ void reading_operation()
     char c = read_character();
     switch (c) {
         case 'q':
-            error_handling("exit");
+            create_internal_read_message(EXIT_READ_CODE);
             break;
         default:
             break;

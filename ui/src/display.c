@@ -14,7 +14,6 @@ static struct termios orig_termios;
 
 void disable_raw_mode(void);    // disable raw mode of command line
 int entering_raw_mode(void);    // enter raw mode of terminal
-void clear_screen(void);        // clear screen and move cursor and the left top bottom
 char read_character(void);      // read input from user
 void reading_operation(void);   // parse income data from user
 

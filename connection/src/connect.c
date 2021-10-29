@@ -105,6 +105,14 @@ int connect_to_server()
 }
 
 
+void disconnect_from_server()
+{
+    if(socket_fd > 0)
+    {
+        close(socket_fd);
+    }
+}
+
 /*
 *   main function for connection, which runs on thread
 */
@@ -129,5 +137,5 @@ void * connect_thread_func(void * arg)
 
     socket_connection_handler();    // loop of connection
 
-    close(socket_fd);
+    disconnect_from_server();
 }
