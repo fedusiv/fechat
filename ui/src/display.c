@@ -7,11 +7,11 @@
 
 
 #include "../include/display.h"
+#include "../include/login_page.h"
 #include "../../common/include/common.h"
 
 static struct termios orig_termios;
 
-void error_handling(const char * error_msg);    // function should be called on any error handlings related to ui
 void disable_raw_mode(void);    // disable raw mode of command line
 int entering_raw_mode(void);    // enter raw mode of terminal
 void clear_screen(void);        // clear screen and move cursor and the left top bottom
@@ -49,32 +49,9 @@ void clear_screen()
     write(STDOUT_FILENO, "\x1b[H", 3);// move cursor to upper left
 }
 
-
-char read_character()
+void display_operations()
 {
-    int rc_read;
-    char c;
-    while( (rc_read = read(STDIN_FILENO, &c, 1)) != 1)
-    {
-        if(rc_read == -1 && errno != EAGAIN)
-        {
-            error_handling("read_character");
-        }
-    }
-    return c;
-}
 
-void reading_operation()
-{
-    char c = read_character();
-    switch (c) {
-        case 'q':
-            exit(0);
-            break;
-        default:
-            write(STDOUT_FILENO,&c,1);
-            break;
-    }
 }
 
 void * ui_thread_func(void * arg)
@@ -82,8 +59,9 @@ void * ui_thread_func(void * arg)
     char c;
     entering_raw_mode();
     clear_screen();
+    draw_login_page();
     while (1) {
-        reading_operation();
+        display_operations();
     }
     clear_screen();
 }

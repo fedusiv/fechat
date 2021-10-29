@@ -49,9 +49,10 @@ void socket_connection_handler()
 {
     int rc;
 
+    // Set socket to be in non blocking mode
     struct timeval tv;
     tv.tv_sec = 0;
-    tv.tv_usec = 10 * 1000;
+    tv.tv_usec = RECEIVE_TIMEOUT_MS * 1000; // 1000 because tv in microsec
     setsockopt(socket_fd, SOL_SOCKET,SO_RCVTIMEO,&tv, sizeof(tv));
 
     while (1)
