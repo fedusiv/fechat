@@ -3,4 +3,4 @@
 
 void * ui_thread_func(void * arg);  // main thread function for ui
 
-#endif
+#endif // __DISPLAY_H__

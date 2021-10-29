@@ -4,5 +4,8 @@
 // Server default info defines
 #define SERVER_PORT 8080
 #define SERVER_ADDR "127.0.0.1"
+#define SERVER_CONNECTION_TIMEOUT_TRY_SEC 1
+#define SERVER_CONNECTION_TRIES 5
+#define RECEIVE_BUFFER_SIZE 128
 
 #endif //__CONNECT_DEFINES_H__
