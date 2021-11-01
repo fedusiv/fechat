@@ -69,6 +69,7 @@ void socket_connection_handler()
         else if( rc == -1)  // some error occured
         {
             //TODO: issue, socket fails here if no info came!
+            // so basically now it goes here, when there is no message
         }
         else
         {
