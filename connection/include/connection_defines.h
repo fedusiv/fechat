@@ -2,7 +2,7 @@
 #define __CONNECT_DEFINES_H__
 
 // Server default info defines
-#define SERVER_PORT 8080
+#define SERVER_PORT 65432
 #define SERVER_ADDR "127.0.0.1"
 #define SERVER_CONNECTION_TIMEOUT_TRY_SEC 1
 #define SERVER_CONNECTION_TRIES 5
