@@ -113,10 +113,12 @@ int get_window_size(display_size_t * d_size)
 
 void disable_raw_mode()
 {
+    clear_screen();
     if(tcsetattr(STDIN_FILENO, TCSAFLUSH, &display_config.orig_termios) == -1)
     {
         error_handling("disable raw mode, tcsetattr");
     }
+    printf("\033[H\033[J"); // Clear screen completely
 }
 
 int entering_raw_mode()
@@ -157,12 +159,6 @@ void refresh_display()
 
     write(STDOUT_FILENO, d_b->buffer, d_b->size);
     db_free(d_b);
-}
-
-void clear_screen()
-{
-    write(STDOUT_FILENO, "\x1b[2J",4);// clear screen
-    write(STDOUT_FILENO, "\x1b[H", 3);// move cursor to upper left
 }
 
 

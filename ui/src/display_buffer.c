@@ -24,5 +24,5 @@ int db_append(display_buffer_t * d_buffer, const char * data, int size)
 void db_free(display_buffer_t * buf)
 {
     free((void * )(buf->buffer));
-    buf->size = 0;
+    //buf->size = 0;
 }

@@ -4,6 +4,7 @@
 #include "../../connection/include/connect.h"
 #include "../../input_capture/include/input_capture.h"
 #include "../include/messaging_queue.h"
+#include "../include/common.h"
 
 void application_exit();    // run exit application procedure
 void parse_read_capture_messages(input_capture_message_t * msg);
@@ -11,7 +12,6 @@ void parse_internal_messages(internal_queue_s * msg);   // first step on parsing
 
 void application_exit()
 {
-    clear_screen();
     disconnect_from_server();
     exit(0);
 }

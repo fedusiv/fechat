@@ -13,5 +13,6 @@ typedef enum APP_STATE_E
 
 APP_STATE get_application_state();
 void error_handling(const char * error_msg);
+void clear_screen();    // clear screen
 
 #endif // __COMMON_H__
