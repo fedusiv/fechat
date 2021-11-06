@@ -11,7 +11,7 @@ typedef struct INPUT_CAPTURE_MESSAGE_S
     INPUT_CAPTURE_MESSAGE_OPCODE opcode;
 }input_capture_message_t;
 
-
-void * read_thread_func(void * arg);
+char read_character();
+void reading_operation();
 
 #endif

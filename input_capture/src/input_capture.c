@@ -1,10 +1,21 @@
 #include <unistd.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <termios.h>
 
 #include "../../common/include/common.h"
 #include "../include/input_capture.h"
 #include "../../common/include/messaging_queue.h"
+
+/*
+ * Defines
+ */ 
+#define CTRL_KEY(k) ((k) & 0x1f)
+
+/*
+ * Functions
+ */
+void create_internal_read_message(INPUT_CAPTURE_MESSAGE_OPCODE opcode);
 
 
 void create_internal_read_message(INPUT_CAPTURE_MESSAGE_OPCODE opcode)
@@ -32,18 +43,10 @@ void reading_operation()
 {
     char c = read_character();
     switch (c) {
-        case 'q':
+        case CTRL_KEY('q'):
             create_internal_read_message(EXIT_READ_CODE);
             break;
         default:
             break;
-    }
-}
-
-void * read_thread_func(void * arg)
-{
-    while(1)
-    {
-        reading_operation();
     }
 }

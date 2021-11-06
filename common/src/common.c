@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "../include/common.h"
 
@@ -12,6 +13,9 @@ APP_STATE get_application_state()
 
 void error_handling(const char * error_msg)
 {
+    write(STDOUT_FILENO, "\x1b[2J",4);// clear screen
+    write(STDOUT_FILENO, "\x1b[H", 3);// move cursor to upper left
+    printf("Program finished with error\n");
     perror(error_msg);
     exit(1);
 }

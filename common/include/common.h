@@ -1,6 +1,9 @@
 #ifndef __COMMON_H__
 #define __COMMON_H__
 
+#define APP_VERSION "061121"
+
+
 typedef enum APP_STATE_E
 {
     STATE_LOGIN,
