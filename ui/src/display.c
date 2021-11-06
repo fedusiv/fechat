@@ -16,16 +16,15 @@
 #include "../include/display_buffer.h"
 #include "../include/display_defines.h"
 
-
 typedef struct _display_config_t 
 {
     struct termios orig_termios;
     display_size_t d_size;  // size of display
     dispaly_cursor_t cursor;    // data about cursor
-    display_buffer_t buffer;
+    display_buffer_t * buffer;
 }display_config_t;
 
-static display_config_t display_config;
+display_config_t display_config;
 
 void init_display();            // init display function
 void disable_raw_mode(void);    // disable raw mode of command line
@@ -36,13 +35,118 @@ int get_window_size(display_size_t * d_size);  // get size of window, command li
 int get_cursor_position(display_size_t * d_size);  // get current position of cursor
 void draw_cursor(display_config_t * d_c);           // draw cursor position
 void refresh_display();
+void draw_login_page(display_config_t * conf, display_buffer_t * buf ,display_size_t d_size);
 
+
+void draw_login_page(display_config_t * conf, display_buffer_t * buf ,display_size_t d_size)
+{
+    int y, x;
+    int welcomelen, loginlen; // real amount of bytes, which should be inserted into one welcome line
+    const char welcome_string[] = "Welcome to fe(dusiv)chat";
+    const char login_string[] = "login: ";
+    const char password_string[] = "password: ";
+    char welcome[80];   // string to store welcome string
+    int padding_left, padding_right;    // amount of space from one side to welcome message
+
+    loginlen = sizeof(login_string);
+
+    // prepare welcome message
+    welcomelen = snprintf(welcome, sizeof(welcome),"%s ver:%s", welcome_string ,APP_VERSION);
+    if (welcomelen > d_size.col_x)
+    {
+        welcomelen = d_size.col_x;
+    }
+
+
+    for(y = 0; y < d_size.row_y; y++)
+    {
+        x = d_size.col_x;
+        //Draw first and last line
+        if(y == 0 || y == (d_size.row_y - 1))
+        {
+            while(x--)
+            {
+                db_append(buf, "f", 1);
+            }
+        }
+        //Draw welcome message
+        else if(y == d_size.row_y / 4)
+        {
+            // Draw padding from left
+            padding_left = (d_size.col_x - welcomelen) / 2;
+            padding_right = padding_left;
+            if(padding_left > 2)
+            {
+                db_append(buf, "f", 1);
+                padding_left--;
+            }
+            while(padding_left--)
+            {
+                db_append(buf, " ", 1);
+            }
+            // Print welcome message
+            db_append(buf, welcome, welcomelen);
+            // Draw right padding
+            while (padding_right)
+            {
+                padding_right--;
+                db_append(buf, " ", 1);
+            }
+            db_append(buf, "f", 1);
+
+        }
+        // Draw login input field
+        else if(y == (d_size.row_y / 3))
+        {
+            padding_left = (d_size.col_x - loginlen) / 2;
+            conf->cursor.cx = padding_left + loginlen;
+            padding_right = padding_left;
+            if(padding_left > 2)
+            {
+                db_append(buf, "f", 1);
+                padding_left--;
+            }
+            while(padding_left--)
+            {
+                db_append(buf, " ", 1);
+            }
+            // At this position need to store cursor position
+            conf->cursor.cy = y;
+            db_append(buf, login_string, loginlen);
+            // Draw right padding
+            while (padding_right)
+            {
+                padding_right--;
+                db_append(buf, " ", 1);
+            }
+            db_append(buf, "f", 1);
+        }
+        // Draw a frame
+        else
+        {
+            db_append(buf, "f", 1);
+            x -= 2;   // 1 glyph for left frame and one for right frame
+            while(x--)
+            {
+                db_append(buf, " ", 1);
+            }
+            db_append(buf, "f", 1);
+        }
+
+
+        db_append(buf, "\x1b[K", 3);    // clear one line
+        if (y < (d_size.row_y - 1)) 
+        {
+            db_append(buf, "\r\n", 2);
+        }
+    }
+}
 
 void draw_cursor(display_config_t * d_c)
 {
     char buf[32];
     snprintf(buf, sizeof(buf), "\x1b[%d;%dH", d_c->cursor.cy + 1, d_c->cursor.cx + 1);  // +1 used, because in command line counts position from 1 index, not as in C from 0 index
-    db_append(&(d_c->buffer), buf, strlen(buf));
+    db_append(d_c->buffer, buf, strlen(buf));
 }
 
 int get_cursor_position(display_size_t * d_size)
@@ -146,18 +250,22 @@ int entering_raw_mode()
 
 void refresh_display()
 {
-    display_buffer_t * d_b = &(display_config.buffer);
+    // Init buffer to display
+    display_buffer_t buf;
+    buf.size = 0;
+    buf.buffer = NULL;
+    display_config.buffer = &buf;
 
-    db_append(d_b, "\x1b[?25l", 6);  // hide cursor
-    db_append(d_b, "\x1b[H", 3); // move cursor to upper right corner
+    db_append(&buf, "\x1b[?25l", 6);  // hide cursor
+    db_append(&buf, "\x1b[H", 3); // move cursor to upper right corner
 
-    draw_login_page(d_b, display_config.d_size);
+    draw_login_page(&display_config, &buf, display_config.d_size);
     draw_cursor(&(display_config));
     
-    db_append(d_b, "\x1b[?25h", 6);
+    db_append(&buf, "\x1b[?25h", 6);
 
-    write(STDOUT_FILENO, d_b->buffer, d_b->size);
-    db_free(d_b);
+    write(STDOUT_FILENO, buf.buffer, buf.size);
+    db_free(&buf);
 }
 
 

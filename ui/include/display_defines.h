@@ -13,5 +13,4 @@ typedef struct _dispaly_cursor_t
     int cy;
 }dispaly_cursor_t;
 
-
 #endif  //__DISPLAY_DEFINES__
