@@ -154,8 +154,7 @@ void refresh_display()
     draw_login_page(d_b, display_config.d_size);
     draw_cursor(&(display_config));
     
-    db_append(&display_config.buffer, "\x1b[?25l", 6);  // hide cursor
-    db_append(&display_config.buffer, "\x1b[H", 3);
+    db_append(d_b, "\x1b[?25h", 6);
 
     write(STDOUT_FILENO, d_b->buffer, d_b->size);
     db_free(d_b);
