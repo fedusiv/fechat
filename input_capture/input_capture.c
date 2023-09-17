@@ -3,9 +3,9 @@
 #include <stdlib.h>
 #include <termios.h>
 
-#include "../../common/include/common.h"
-#include "../include/input_capture.h"
-#include "../../common/include/messaging_queue.h"
+#include "common.h"
+#include "input_capture.h"
+#include "messaging_queue.h"
 
 /*
  * Defines

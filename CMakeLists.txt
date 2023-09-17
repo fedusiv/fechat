@@ -1,34 +1,41 @@
-cmake_minimum_required(VERSION 3.10)
+cmake_minimum_required(VERSION 3.16)
 
+# By default clang for MacOS. GCC for Linux. It can be unify in future
+if(UNIX)
+    if(APPLE)
+        set(CMAKE_HOST_SYSTEM_PROCESSOR arm64)
+        set(CMAKE_CXX_COMPILER "/usr/bin/clang++")
+        set(CMAKE_C_COMPILER "/usr/bin/clang")
+        add_compile_definitions(MACOSX)
+        message("Running on MacOS systems.") 
+    else()
+        set(CMAKE_CXX_COMPILER "/usr/bin/g++")
+        set(CMAKE_C_COMPILER "/usr/bin/gcc")
+        add_compile_definitions(UNIX)
+        message("Running on Linux systems.")
+    endif()
+endif()
 # set the project name
 project(fechat)
 
 # Ui files
-file(GLOB UI_INCLUDE_FILES "ui/include/*.h") 
-file(GLOB UI_SRC_FILES "ui/src/*.c")
-
-set(UI_FILES ${UI_INCLUDE_FILES} ${UI_SRC_FILES})
-
+file(GLOB UI_SRC_FILES "ui/*.c")
 # connect files
-file(GLOB CONNECT_INCLUDE_FILES "connection/include/*.h") 
-file(GLOB CONNECT_SRC_FILES "connection/src/*.c")
-
-set(CONNECT_FILES ${CONNECT_SRC_FILES} ${CONNECT_INCLUDE_FILES})
-
+file(GLOB CONNECT_SRC_FILES "connection/*.c")
 # Common files
-file(GLOB COMMON_INCLUDE_FILES "common/include/*.h") 
-file(GLOB COMMON_SRC_FILES "common/src/*.c")
-
-set(COMMON_FILES ${COMMON_SRC_FILES} ${COMMON_INCLUDE_FILES})
-
+file(GLOB COMMON_SRC_FILES "common/*.c")
 #input capture files
-file(GLOB INPUT_INCLUDE_FILES "input_capture/include/*.h") 
-file(GLOB INPUT_SRC_FILES "input_capture/src/*.c")
+file(GLOB INPUT_SRC_FILES "input_capture/*.c")
 
-set(INPUT_FILES ${INPUT_INCLUDE_FILES} ${INPUT_SRC_FILES})
-
-set(SOURCES main.c ${UI_FILES} ${CONNECT_FILES} ${COMMON_FILES} ${INPUT_FILES})
+set(SOURCE_FILES ${UI_SRC_FILES} ${CONNECT_SRC_FILES} ${COMMON_SRC_FILES} ${INPUT_SRC_FILES})
+set(SOURCES main.c ${SOURCE_FILES})
 # add the executable
-add_executable(fechat ${SOURCES})
+add_executable(${PROJECT_NAME} ${SOURCES})
 
-target_link_libraries(fechat pthread)
+
+target_include_directories(${PROJECT_NAME} PRIVATE "ui")
+target_include_directories(${PROJECT_NAME} PRIVATE "connection")
+target_include_directories(${PROJECT_NAME} PRIVATE "common")
+target_include_directories(${PROJECT_NAME} PRIVATE "input_capture")
+
+target_link_libraries(${PROJECT_NAME} pthread)

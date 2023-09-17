@@ -10,11 +10,11 @@
 #include <string.h>
 
 
-#include "../include/display.h"
-#include "../include/login_page.h"
-#include "../../common/include/common.h"
-#include "../include/display_buffer.h"
-#include "../include/display_defines.h"
+#include "display.h"
+#include "login_page.h"
+#include "common.h"
+#include "display_buffer.h"
+#include "display_defines.h"
 
 typedef struct _display_config_t 
 {

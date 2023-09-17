@@ -1,7 +1,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#include "../include/display_buffer.h"
+#include "display_buffer.h"
 
 int db_append(display_buffer_t * d_buffer, const char * data, int size)
 {

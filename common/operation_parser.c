@@ -1,10 +1,10 @@
 #include <stdlib.h>
 
-#include "../../ui/include/display.h"
-#include "../../connection/include/connect.h"
-#include "../../input_capture/include/input_capture.h"
-#include "../include/messaging_queue.h"
-#include "../include/common.h"
+#include "display.h"
+#include "connect.h"
+#include "input_capture.h"
+#include "messaging_queue.h"
+#include "common.h"
 
 void application_exit();    // run exit application procedure
 void parse_read_capture_messages(input_capture_message_t * msg);

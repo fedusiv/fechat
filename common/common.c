@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "../include/common.h"
+#include "common.h"
 
 APP_STATE g_application_state;  // global state of appliaction
 

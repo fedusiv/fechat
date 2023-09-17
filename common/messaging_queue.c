@@ -6,7 +6,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 
-#include "../include/messaging_queue.h"
+#include "messaging_queue.h"
 
 internal_queue_s internal_message_head;
 pthread_mutex_t queue_lock;

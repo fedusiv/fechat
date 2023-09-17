@@ -5,9 +5,9 @@
 #include <errno.h>
 #include <time.h>
 
-#include "../include/connection_defines.h"
-#include "../include/connect.h"
-#include "../../common/include/common.h"
+#include "connection_defines.h"
+#include "connect.h"
+#include "common.h"
 
 
 // variables declaration
@@ -139,4 +139,6 @@ void * connect_thread_func(void * arg)
     socket_connection_handler();    // loop of connection
 
     disconnect_from_server();
+
+    return NULL;
 }

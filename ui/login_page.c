@@ -5,8 +5,8 @@
 #include <ctype.h>
 #include <errno.h>
 
-#include "../include/login_page.h"
-#include "../../common/include/common.h"
-#include "../include/display_defines.h"
+#include "login_page.h"
+#include "common.h"
+#include "display_defines.h"
 
 

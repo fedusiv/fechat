@@ -1,9 +1,9 @@
 #include <pthread.h>
 #include <stdlib.h>
-#include "ui/include/display.h"
-#include "connection/include/connect.h"
-#include "common/include/messaging_queue.h"
-#include "common/include/operation_parser.h"
+#include "display.h"
+#include "connect.h"
+#include "messaging_queue.h"
+#include "operation_parser.h"
 
 int main()
 {
