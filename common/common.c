@@ -13,8 +13,8 @@ APP_STATE get_application_state()
 
 void clear_screen()
 {
-    write(STDOUT_FILENO, "\x1b[2J",4);// clear screen
     write(STDOUT_FILENO, "\x1b[H", 3);// move cursor to upper left
+    write(STDOUT_FILENO, "\x1b[2J",4);// clear screen
 }
 
 void error_handling(const char * error_msg)

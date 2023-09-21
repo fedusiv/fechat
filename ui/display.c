@@ -57,12 +57,11 @@ void draw_login_page(display_config_t * conf, display_buffer_t * buf ,display_si
         welcomelen = d_size.col_x;
     }
 
-
     for(y = 0; y < d_size.row_y; y++)
     {
         x = d_size.col_x;
         //Draw first and last line
-        if(y == 0 || y == (d_size.row_y - 1))
+        if(y == 1 || y == (d_size.row_y - 1))
         {
             while(x--)
             {
@@ -222,13 +221,15 @@ void disable_raw_mode()
     {
         error_handling("disable raw mode, tcsetattr");
     }
-    printf("\033[H\033[J"); // Clear screen completely
+    system("tput rmcup"); // exit alternate screen
 }
 
 int entering_raw_mode()
 {
     struct termios raw;
-    
+
+    system("tput smcup");   // enter alternate screen
+
     if(tcgetattr(STDIN_FILENO, &display_config.orig_termios) == -1)
     {
         error_handling("enter raw mode, tcsetattr");
@@ -238,12 +239,13 @@ int entering_raw_mode()
     raw = display_config.orig_termios;
     raw.c_iflag &= ~(BRKINT | ICRNL | INPCK | ISTRIP | IXON);
     raw.c_iflag &= ~(IXON | ICRNL); // IXON disable ctrl-s and ctrl-q, ICRNL - ctrl-m
-    raw.c_oflag &= ~(OPOST);
-    raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG);
+    raw.c_oflag &= ~(OPOST); // playing with carriage return, to get more control
+    raw.c_lflag &= ~(ECHO | ICANON | IEXTEN | ISIG); // turn off canonical mode, sigint(ctrl-z, ctrl-c), disable ctrl-v
     raw.c_cflag |= (CS8);
     raw.c_cc[VMIN] = 0;
     raw.c_cc[VTIME] = 1; // This timing settings make nonblocking for read operation to wait only for 100 msec
     tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
+
 
     return 0;
 }
@@ -262,7 +264,7 @@ void refresh_display()
     draw_login_page(&display_config, &buf, display_config.d_size);
     draw_cursor(&(display_config));
     
-    db_append(&buf, "\x1b[?25h", 6);
+    db_append(&buf, "\x1b[?25h", 6); // show cursor
 
     write(STDOUT_FILENO, buf.buffer, buf.size);
     db_free(&buf);
