@@ -60,39 +60,18 @@ void draw_login_page(display_config_t * conf, display_buffer_t * buf ,display_si
     for(y = 0; y < d_size.row_y; y++)
     {
         x = d_size.col_x;
-        //Draw first and last line
-        if(y == 1 || y == (d_size.row_y - 1))
-        {
-            while(x--)
-            {
-                db_append(buf, "f", 1);
-            }
-        }
         //Draw welcome message
-        else if(y == d_size.row_y / 4)
+        if(y == d_size.row_y / 4)
         {
             // Draw padding from left
             padding_left = (d_size.col_x - welcomelen) / 2;
             padding_right = padding_left;
-            if(padding_left > 2)
-            {
-                db_append(buf, "f", 1);
-                padding_left--;
-            }
             while(padding_left--)
             {
                 db_append(buf, " ", 1);
             }
             // Print welcome message
             db_append(buf, welcome, welcomelen);
-            // Draw right padding
-            while (padding_right)
-            {
-                padding_right--;
-                db_append(buf, " ", 1);
-            }
-            db_append(buf, "f", 1);
-
         }
         // Draw login input field
         else if(y == (d_size.row_y / 3))
@@ -100,11 +79,6 @@ void draw_login_page(display_config_t * conf, display_buffer_t * buf ,display_si
             padding_left = (d_size.col_x - loginlen) / 2;
             conf->cursor.cx = padding_left + loginlen;
             padding_right = padding_left;
-            if(padding_left > 2)
-            {
-                db_append(buf, "f", 1);
-                padding_left--;
-            }
             while(padding_left--)
             {
                 db_append(buf, " ", 1);
@@ -112,24 +86,11 @@ void draw_login_page(display_config_t * conf, display_buffer_t * buf ,display_si
             // At this position need to store cursor position
             conf->cursor.cy = y;
             db_append(buf, login_string, loginlen);
-            // Draw right padding
-            while (padding_right)
-            {
-                padding_right--;
-                db_append(buf, " ", 1);
-            }
-            db_append(buf, "f", 1);
         }
         // Draw a frame
         else
         {
-            db_append(buf, "f", 1);
-            x -= 2;   // 1 glyph for left frame and one for right frame
-            while(x--)
-            {
-                db_append(buf, " ", 1);
-            }
-            db_append(buf, "f", 1);
+
         }
 
 
